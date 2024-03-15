@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dunning-Kruger Effect Animation</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="400"></canvas>
 
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set up the initial state of the animation
+    let actualKnowledge = 0;
+    let perceivedKnowledge = 80;
+
+    function drawGraph() {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw the axes
+      ctx.beginPath();
+      ctx.moveTo(50, 350);
+      ctx.lineTo(50, 50);
+      ctx.lineTo(550, 50);
+      ctx.stroke();
+
+      // Draw the labels
+      ctx.font = '12px Arial';
+      ctx.fillText('Actual Knowledge', 250, 380);
+      ctx.save();
+      ctx.translate(20, 200);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('Perceived Knowledge', 0, 0);
+      ctx.restore();
+
+      // Draw the curve
+      ctx.beginPath();
+      ctx.moveTo(50, 350 - perceivedKnowledge);
+      ctx.quadraticCurveTo(
+        150,
+        350 - perceivedKnowledge + 20,
+        250,
+        350 - Math.min(perceivedKnowledge, actualKnowledge)
+      );
+      ctx.quadraticCurveTo(
+        350,
+        350 - Math.min(perceivedKnowledge, actualKnowledge) - 20,
+        550,
+        350 - actualKnowledge
+      );
+      ctx.stroke();
+    }
+
+    function updateState() {
+      actualKnowledge += 0.5;
+      perceivedKnowledge = Math.max(80 - actualKnowledge * 0.2, actualKnowledge);
+      drawGraph();
+
+      if (actualKnowledge <= 100) {
+        requestAnimationFrame(updateState);
+      }
+    }
+
+    // Start the animation
+    drawGraph();
+    requestAnimationFrame(updateState);
+  </script>
+</body>
+</html>
