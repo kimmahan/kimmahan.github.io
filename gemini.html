@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dunning-Kruger Effect</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="500" height="500"></canvas>
+
+  <script>
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+
+    // Create a gradient for the background
+    var gradient = ctx.createLinearGradient(0, 0, 500, 500);
+    gradient.addColorStop(0, 'white');
+    gradient.addColorStop(1, 'black');
+
+    // Fill the background with the gradient
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 500, 500);
+
+    // Create a function to draw the curve
+    function drawCurve(x, y, width, height, color) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x + width / 2, y - height / 2, x + width / 2, y + height / 2, x + width, y);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Draw the curve for the Dunning-Kruger Effect
+    drawCurve(50, 250, 400, 200, 'red');
+
+    // Create a function to draw the labels
+    function drawLabel(x, y, text) {
+      ctx.fillStyle = 'white';
+      ctx.font = '14px Arial';
+      ctx.fillText(text, x, y);
+    }
+
+    // Draw the labels for the Dunning-Kruger Effect
+    drawLabel(50, 270, 'Low Skill');
+    drawLabel(450, 270, 'High Skill');
+    drawLabel(250, 150, 'Confidence');
+  </script>
+</body>
+</html>
