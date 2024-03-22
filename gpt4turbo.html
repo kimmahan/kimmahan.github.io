@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dunning-Kruger Effect Animation</title>
+<style>
+  canvas {
+    border: 1px solid black;
+  }
+</style>
+</head>
+<body>
+<canvas id="dunningKrugerCanvas" width="600" height="400"></canvas>
+
+<script>
+  const canvas = document.getElementById('dunningKrugerCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // Function to draw the Dunning-Kruger curve
+  function drawCurve() {
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height); // Start at bottom-left
+    ctx.quadraticCurveTo(canvas.width / 3, 0, canvas.width, canvas.height / 2); // Dunning-Kruger curve
+    ctx.strokeStyle = 'blue';
+    ctx.stroke();
+  }
+
+  // Function to animate a point moving along the curve to illustrate the effect
+  function animatePoint() {
+    let x = 0;
+    let y = canvas.height;
+    let confidence = 0;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+      drawCurve(); // Redraw the curve
+
+      // Draw the animated point
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+
+      // Update the x, y position of the point
+      x += 1;
+      if (x < canvas.width / 3) {
+        // Before peak confidence
+        confidence = -Math.pow(x / (canvas.width / 3), 2) + 1;
+      } else {
+        // After peak confidence
+        confidence = (x - canvas.width / 3) / (canvas.width * 2 / 3);
+      }
+      y = canvas.height - (canvas.height * confidence);
+
+      // Continue the animation if we haven't reached the end of the canvas
+      if (x < canvas.width) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  }
+
+  // Draw the initial curve
+  drawCurve();
+
+  // Start the animation
+  animatePoint();
+</script>
+</body>
+</html>
